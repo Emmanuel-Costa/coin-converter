@@ -28,13 +28,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun bindAdapters() {
         val list = Coin.values()
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
-
-        binding.tvFrom.setAdapter(adapter)
-        binding.tvTo.setAdapter(adapter)
+        var adapterFrom = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+        binding.tvFrom.setAdapter(adapterFrom)
+        var adapterTo = ArrayAdapter(this,android.R.layout.simple_list_item_1, list)
+        binding.tvFrom.doAfterTextChanged {
+            adapterTo = ArrayAdapter(this,android.R.layout.simple_list_item_1, list.filter { it.name != binding.tvFrom.text.toString() })
+            binding.tvTo.setAdapter(adapterTo)
+        }
+        binding.tvTo.doAfterTextChanged {
+            adapterFrom = ArrayAdapter(this, android.R.layout.simple_list_item_1, list.filter { it.name != binding.tvTo.text.toString() })
+            binding.tvFrom.setAdapter(adapterFrom)
+        }
 
         binding.tvFrom.setText(Coin.USD.name, false)
-        binding.tvTo.setText(Coin.BRL.name, false)
+        binding.tvTo.setText(Coin.BRL.name,false)
 
     }
 
